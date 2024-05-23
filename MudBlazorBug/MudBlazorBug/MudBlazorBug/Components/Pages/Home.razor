@@ -1,0 +1,50 @@
+﻿@page "/"
+@using MudDataGridBug
+@rendermode InteractiveServer
+
+<style>
+
+.mud-toolbar 
+{
+    flex-direction: row-reverse;
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+}
+
+
+</style>
+
+<MudDataGrid @ref="grid" T="LogRowData" Items="@rows" Filterable="true" SortMode="@SortMode.Multiple" Groupable="false" Height="80vh" >
+    <Columns>
+        @for (int i = 0; i < columns.Length; i++)
+        {
+            int idx = i;
+            ColumnDesciption column = columns[i];
+            <PropertyColumn Property="x => x.GetString(idx)" Title="@column.name" Hidden="@(!column.hasData)" />
+        }
+    </Columns>
+
+    <PagerContent>
+        <MudDataGridPager T="LogRowData" PageSizeOptions="@(new int[] { 10, 100, 500 })"/>
+    </PagerContent>
+</MudDataGrid>
+
+@code {
+    private ColumnDesciption[] columns =
+        [
+            new ColumnDesciption() { name = "#", hasData = true },
+    new ColumnDesciption() { name = "id", hasData = true },
+    new ColumnDesciption() { name = "message", hasData = true },
+    ];
+    private LogRowData[] rows =
+    [
+        new LogRowData( [ 1, 42, "Message One"] ),
+        new LogRowData( [ 2, 567, "Message Two"] ),
+        new LogRowData( [ 3, 123, "Message Three"] ),
+        new LogRowData( [ 4, 888, "Message Four"] ),
+    ];
+    private MudDataGrid<LogRowData>? grid;
+
+
+}
